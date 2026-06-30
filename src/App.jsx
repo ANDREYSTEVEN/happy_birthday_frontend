@@ -5,7 +5,6 @@ import VideoCinema from './components/VideoCinema';
 import Scrapbook from './components/Scrapbook';
 import WishJar from './components/WishJar';
 import TriviaQuiz from './components/TriviaQuiz';
-import AdminPanel from './components/AdminPanel';
 import { Heart } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -51,34 +50,12 @@ export default function App() {
   const [lightsOff, setLightsOff] = useState(false);
   const [startMusic, setStartMusic] = useState(false);
   const [content, setContent] = useState(null);
-  const [isAdminMode, setIsAdminMode] = useState(false);
 
   const handleLoginSuccess = (payload) => {
     console.log("Login exitoso! Datos recibidos del servidor:", payload);
     setContent(payload);
     setIsLoggedIn(true);
     setStartMusic(true);
-  };
-
-  const handleAdminAccess = async () => {
-    console.log("Acceso de admin validado. Cargando datos para edición...");
-    try {
-      const response = await fetch(`${API_URL}/api/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answer: 'bogota' })
-      });
-      const data = await response.json();
-      if (response.ok && data.success) {
-        setContent(data.content);
-        setIsAdminMode(true);
-      } else {
-        throw new Error(data.message || 'Error cargando datos de configuración');
-      }
-    } catch (err) {
-      console.error("Error al obtener la configuración actual del servidor:", err);
-      alert("No se pudo cargar la configuración del servidor. ¿Está el backend encendido?");
-    }
   };
 
   return (
@@ -106,20 +83,9 @@ export default function App() {
         }}
       />
 
-      {isAdminMode ? (
-        // Panel de Administración
-        <AdminPanel 
-          initialContent={content} 
-          apiUrl={API_URL} 
-          onClose={() => {
-            setIsAdminMode(false);
-            setIsLoggedIn(false);
-            setContent(null);
-          }} 
-        />
-      ) : !isLoggedIn ? (
+      {!isLoggedIn ? (
         // Login Seguro
-        <Login onLogin={handleLoginSuccess} onAdminAccess={handleAdminAccess} apiUrl={API_URL} />
+        <Login onLogin={handleLoginSuccess} apiUrl={API_URL} />
       ) : !content ? (
         // En caso de que la respuesta sea exitosa pero no traiga el contenido esperado
         <div className="flex-center" style={{ minHeight: '100vh', flexDirection: 'column', gap: '16px', padding: '30px', textAlign: 'center', zIndex: 100, position: 'relative' }}>
