@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { Lock, Sparkles, KeyRound } from 'lucide-react';
+import { Lock, Sparkles, KeyRound, Settings, X } from 'lucide-react';
 
-export default function Login({ onLogin, apiUrl }) {
+export default function Login({ onLogin, onAdminAccess, apiUrl }) {
   const [answer, setAnswer] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [questionData, setQuestionData] = useState({ question: '...', hintText: '' });
   const [shake, setShake] = useState(false);
+  
+  // Estados para el acceso del Administrador
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [adminPassInput, setAdminPassInput] = useState('');
+  const [adminError, setAdminError] = useState('');
 
   // Cargar pregunta secreta desde el backend
   useEffect(() => {
@@ -74,6 +79,17 @@ export default function Login({ onLogin, apiUrl }) {
       setTimeout(() => setShake(false), 500);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAdminSubmit = (e) => {
+    e.preventDefault();
+    setAdminError('');
+    if (adminPassInput === 'admin123') {
+      setShowAdminModal(false);
+      onAdminAccess();
+    } else {
+      setAdminError('Contraseña incorrecta');
     }
   };
 
@@ -157,6 +173,59 @@ export default function Login({ onLogin, apiUrl }) {
           </button>
         </form>
       </div>
+
+      {/* Botón flotante de administración discreto */}
+      <button 
+        onClick={() => setShowAdminModal(true)} 
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          left: '20px',
+          background: 'transparent',
+          border: 'none',
+          color: 'rgba(255,255,255,0.06)',
+          cursor: 'pointer',
+          zIndex: 100,
+          outline: 'none'
+        }}
+        title="Configuración de administrador"
+        onMouseEnter={(e) => e.target.style.color = 'rgba(255,255,255,0.3)'}
+        onMouseLeave={(e) => e.target.style.color = 'rgba(255,255,255,0.06)'}
+      >
+        <Settings className="w-5 h-5" />
+      </button>
+
+      {/* Modal de Acceso del Administrador */}
+      {showAdminModal && (
+        <div className="modal-overlay" style={{ zIndex: 200 }}>
+          <div className="glass-card" style={{ padding: '32px', maxWidth: '340px', width: '100%', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <button onClick={() => setShowAdminModal(false)} className="btn-close-letter" style={{ top: '16px', right: '16px' }}>
+              <X className="w-4 h-4" />
+            </button>
+            <h3 className="font-serif text-lg text-white mb-4" style={{ marginTop: '10px' }}>Acceso de Administrador</h3>
+            
+            <form onSubmit={handleAdminSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <input 
+                type="password" 
+                value={adminPassInput} 
+                onChange={(e) => {
+                  setAdminPassInput(e.target.value);
+                  setAdminError('');
+                }} 
+                placeholder="Escribe admin123..." 
+                className="input-premium" 
+                autoFocus
+              />
+              {adminError && (
+                <p className="error-container" style={{ margin: 0, padding: '8px 12px', fontSize: '0.75rem' }}>
+                  {adminError}
+                </p>
+              )}
+              <button type="submit" className="btn-gold">Ingresar</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
