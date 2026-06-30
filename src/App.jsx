@@ -88,12 +88,16 @@ export default function App() {
         <Login onLogin={handleLoginSuccess} apiUrl={API_URL} />
       ) : !content ? (
         // En caso de que la respuesta sea exitosa pero no traiga el contenido esperado
-        <div className="flex-center" style={{ minHeight: '100vh', flexDirection: 'column', gap: '16px', padding: '30px', textAlign: 'center', zIndex: 100, position: 'relative' }}>
-          <h2 className="font-serif text-2xl text-yellow-400">Error de Integración</h2>
-          <p className="text-slate-400 text-sm max-w-md">
-            El acceso fue autorizado por el servidor, pero los datos de la sorpresa no se recibieron en el formato esperado. 
-            Asegúrate de que el backend de Render esté actualizado con el último código de GitHub.
-          </p>
+        <div className="flex-center" style={{ minHeight: '100vh', flexDirection: 'column', padding: '30px', textAlign: 'center', zIndex: 100, position: 'relative' }}>
+          <div className="glass-card" style={{ maxWidth: '440px', padding: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+            <h2 className="font-serif" style={{ fontSize: '1.8rem', color: 'var(--color-gold)', margin: 0 }}>Error de Integración</h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6', fontWeight: 300, margin: 0 }}>
+              El acceso fue autorizado por el servidor, pero los datos de la sorpresa no se recibieron en el formato esperado.
+            </p>
+            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.78rem', lineHeight: '1.5', margin: 0 }}>
+              Asegúrate de que el backend de Render esté actualizado con el último código de GitHub y esté corriendo con el archivo config.json.
+            </p>
+          </div>
         </div>
       ) : (
         // Contenido Principal envuelto en ErrorBoundary
