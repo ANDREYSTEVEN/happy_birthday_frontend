@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, Volume2, VolumeX, Music4 } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Music } from 'lucide-react';
 
 export default function MusicPlayer({ musicUrl, autoPlayTrigger }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -42,7 +42,7 @@ export default function MusicPlayer({ musicUrl, autoPlayTrigger }) {
 
       {/* Botón Icono */}
       <div className="music-capsule-icon" onClick={togglePlay}>
-        <Music4 className="w-4 h-4" />
+        <Music className="w-4 h-4" />
       </div>
 
       {/* Fila de Controles */}

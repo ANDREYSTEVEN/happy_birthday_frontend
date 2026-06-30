@@ -1,5 +1,5 @@
 import React from 'react';
-import { Camera, CalendarRange } from 'lucide-react';
+import { Camera, Calendar } from 'lucide-react';
 
 export default function Scrapbook({ memories }) {
   if (!memories || memories.length === 0) return null;
@@ -40,7 +40,7 @@ export default function Scrapbook({ memories }) {
                 <div className="gallery-info">
                   {/* Fecha */}
                   <div className="gallery-date">
-                    <CalendarRange className="w-3.5 h-3.5" />
+                    <Calendar className="w-3.5 h-3.5" />
                     <span>{memory.date}</span>
                   </div>
 

@@ -16,6 +16,7 @@ export default function App() {
   const [content, setContent] = useState(null);
 
   const handleLoginSuccess = (payload) => {
+    console.log("Login exitoso! Datos recibidos del servidor:", payload);
     setContent(payload);
     setIsLoggedIn(true);
     setStartMusic(true);
@@ -46,6 +47,15 @@ export default function App() {
       {!isLoggedIn ? (
         // Login Seguro
         <Login onLogin={handleLoginSuccess} apiUrl={API_URL} />
+      ) : !content ? (
+        // En caso de que la respuesta sea exitosa pero no traiga el contenido esperado
+        <div className="flex-center" style={{ minHeight: '100vh', flexDirection: 'column', gap: '16px', padding: '30px', textAlign: 'center', zIndex: 100, position: 'relative' }}>
+          <h2 className="font-serif text-2xl text-yellow-400">Error de Integración</h2>
+          <p className="text-slate-400 text-sm max-w-md">
+            El acceso fue autorizado por el servidor, pero los datos de la sorpresa no se recibieron en el formato esperado. 
+            Asegúrate de que el backend de Render esté actualizado con el último código de GitHub.
+          </p>
+        </div>
       ) : (
         // Contenido Principal
         <div className="main-container">
