@@ -90,6 +90,9 @@ export default function App() {
         <div className="orb orb-3"></div>
       </div>
 
+      {/* Capa de Estrellas Brillantes */}
+      <div className="stars-overlay"></div>
+
       {/* Overlay de Modo Inmersivo */}
       <div 
         style={{
